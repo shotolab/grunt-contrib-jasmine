@@ -125,11 +125,17 @@ module.exports = function(grunt) {
   });
 
   function phantomRunner(options, cb){
-    var file = options.outfile;
+    var runfile = (function () {
+      if (options.runfile !== undefined) {
+        return options.runfile;
+      }
+      return options.outfile;
+    })(),
+    file;
 
     if (options.host) {
       if (!(/\/$/).test(options.host)) options.host = options.host + '/';
-      file = options.host + options.outfile;
+      file = options.host + runfile;
     }
 
     grunt.verbose.subhead('Testing jasmine specs via phantom').or.writeln('Testing jasmine specs via PhantomJS');
